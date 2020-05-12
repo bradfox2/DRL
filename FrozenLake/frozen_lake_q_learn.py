@@ -1,4 +1,8 @@
-''' Beats the OpenAI Gym Frozen Lake environment by using Q learning and a simple state, action table'''
+''' Cheater version of RL using a state action table with direct rewards.
+
+https://gym.openai.com/envs/FrozenLake-v0/
+
+'''
 
 import heapq
 from collections import defaultdict
@@ -14,7 +18,7 @@ state_rewards = defaultdict(dict)
 obs_actions = defaultdict(dict)
 obs = None
 
-for _ in range(10000):
+for _ in range(1000):
     #greedy strategy if below eps else random
     env.reset()
     eps = random()
@@ -22,7 +26,7 @@ for _ in range(10000):
     while not done:
         
         # randomly sample moves 10% of time
-        if eps > .9 or obs is None:
+        if eps > .98 or obs is None:
             action = env.action_space.sample() 
         else:
             # take the learned greedy move
@@ -45,7 +49,7 @@ for _ in range(10000):
             state_rewards[obs][action] = new_reward
         
         else:
-            # if we're done without being in space 15, we fell in a hole in died, -1 point
+            # if we're done without being in space 15, we fell in a hole and died, -1 point
             new_reward = state_rewards.get(obs,{}).get(action,0) - 1
             state_rewards[obs][action] = new_reward
             
